@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { Post } from '../domain/entities/post.entity';
-import { db } from '../../index';
 import { postModel } from '../../db/schema';
 import { eq } from 'drizzle-orm';
+import { DatabaseService } from '../../database/database.service';
 
 @Injectable()
 export class PostsRepository {
+  constructor(private readonly database: DatabaseService) {}
+
   async save(post: Post): Promise<Post> {
-    const id = await db
+    const id = await this.database
+      .getDb()
       .insert(postModel)
       .values({
         writer: post.writer,
@@ -22,7 +25,8 @@ export class PostsRepository {
   }
 
   async findById(postId: string): Promise<Post> {
-    const record = await db
+    const record = await this.database
+      .getDb()
       .select()
       .from(postModel)
       .where(eq(postModel.id, postId))
