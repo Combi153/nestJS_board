@@ -48,6 +48,12 @@ $ npm run start:prod
 ## Run tests
 
 ```bash
+# test db setting
+$ docker compose --env-file ./.test.env up
+```
+
+
+```bash
 # unit tests
 $ npm run test
 
