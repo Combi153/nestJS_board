@@ -1,37 +1,17 @@
-import { PostCategory } from '../enum/category.enum';
+import { Column, Entity } from 'typeorm';
+import { CommonEntity } from '../../../common/entities/common-entity';
 
-export class Post {
-  id: string;
+@Entity('posts')
+export class Post extends CommonEntity {
+  @Column()
   writer: string;
-  type: PostCategory;
-  title: string;
-  content: string;
-  createdAt: Date;
-  updatedAt: Date;
 
-  constructor({
-    id,
-    writer,
-    type,
-    title,
-    content,
-    createdAt,
-    updatedAt,
-  }: {
-    id?: string;
-    writer: string;
-    type: PostCategory;
-    title: string;
-    content: string;
-    createdAt?: Date;
-    updatedAt?: Date;
-  }) {
-    this.id = id;
+  @Column()
+  content: string;
+
+  constructor(writer: string, content: string) {
+    super();
     this.writer = writer;
-    this.type = type;
-    this.title = title;
     this.content = content;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
   }
 }

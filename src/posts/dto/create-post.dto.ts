@@ -1,18 +1,15 @@
-import { PostCategory } from '../domain/enum/category.enum';
 import { Post } from '../domain/entities/post.entity';
 
 export class CreatePostDto {
   writer: string;
-  type: PostCategory;
-  title: string;
   content: string;
 
+  constructor(writer: string, content: string) {
+    this.writer = writer;
+    this.content = content;
+  }
+
   toPost(): Post {
-    return new Post({
-      writer: this.writer,
-      type: this.type,
-      title: this.title,
-      content: this.content,
-    });
+    return new Post(this.writer, this.content);
   }
 }

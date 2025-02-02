@@ -10,14 +10,15 @@ import {
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { Post as DomainPost } from './domain/entities/post.entity';
 
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  async create(@Body() createPostDto: CreatePostDto): Promise<DomainPost> {
+    return await this.postsService.create(createPostDto);
   }
 
   @Get()
@@ -26,8 +27,8 @@ export class PostsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
+  async findOne(@Param('id') id: string): Promise<DomainPost> {
+    return await this.postsService.findOne(id);
   }
 
   @Patch(':id')

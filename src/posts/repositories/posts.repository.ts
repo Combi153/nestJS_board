@@ -1,45 +1,42 @@
 import { Injectable } from '@nestjs/common';
+import {
+  CommonRepository,
+  Query,
+} from '../../common/repositories/common-repository';
 import { Post } from '../domain/entities/post.entity';
-import { postModel } from '../../db/schema';
-import { eq } from 'drizzle-orm';
-import { DatabaseService } from '../../database/database.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreatePostDto } from '../dto/create-post.dto';
+import { UpdatePostDto } from '../dto/update-post.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class PostsRepository {
-  constructor(private readonly database: DatabaseService) {}
+export class PostsRepository implements CommonRepository<Post> {
+  constructor(
+    @InjectRepository(Post)
+    private readonly typeOrmRepository: Repository<Post>,
+  ) {}
 
-  async save(post: Post): Promise<Post> {
-    const id = await this.database
-      .getDb()
-      .insert(postModel)
-      .values({
-        writer: post.writer,
-        type: post.type,
-        title: post.title,
-        content: post.content,
-      })
-      .$returningId()
-      .then((result) => result[0].id);
-
-    return await this.findById(id);
+  async create(dto: CreatePostDto): Promise<Post> {
+    return await this.typeOrmRepository.save(dto.toPost());
   }
 
-  async findById(postId: string): Promise<Post> {
-    const record = await this.database
-      .getDb()
-      .select()
-      .from(postModel)
-      .where(eq(postModel.id, postId))
-      .then((results) => results[0]);
+  async findById(id: string): Promise<Post> {
+    return await this.typeOrmRepository.findOneBy({ id });
+  }
 
-    return new Post({
-      id: record.id,
-      writer: record.writer,
-      type: record.type,
-      title: record.title,
-      content: record.content,
-      createdAt: record.createdAt,
-      updatedAt: record.updatedAt,
-    });
+  findMany(ids: string[]): Promise<Post[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  findAll(query: Query): Promise<Post[]> {
+    throw new Error('Method not implemented.');
+  }
+
+  update(id: string, dto: UpdatePostDto): Promise<Post> {
+    throw new Error('Method not implemented.');
+  }
+
+  remove(id: string): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 }

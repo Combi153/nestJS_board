@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PostsModule } from './posts/posts.module';
-import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
@@ -14,7 +13,6 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
     }),
     PostsModule,
-    DatabaseModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DATABASE_HOST,
@@ -24,6 +22,7 @@ import { UsersModule } from './users/users.module';
       database: process.env.DATABASE_SCHEMA,
       autoLoadEntities: true,
       synchronize: true,
+      logging: true,
     }),
     UsersModule,
   ],

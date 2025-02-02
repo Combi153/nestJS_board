@@ -19,23 +19,23 @@ export class UserRepository implements CommonRepository<User> {
     return await this.userRepository.save(User.of(dto.name, dto.email));
   }
 
-  findById(id: string): Promise<User> {
+  async findById(id: string): Promise<User> {
+    return await this.userRepository.findOneBy({ id });
+  }
+
+  async findMany(ids: string[]): Promise<User[]> {
     throw new Error('Method not implemented.');
   }
 
-  findMany(ids: string[]): Promise<User[]> {
+  async findAll(query: Query): Promise<User[]> {
     throw new Error('Method not implemented.');
   }
 
-  findAll(query: Query): Promise<User[]> {
+  async update(id: string, dto: any): Promise<User> {
     throw new Error('Method not implemented.');
   }
 
-  update(id: string, dto: any): Promise<User> {
-    throw new Error('Method not implemented.');
-  }
-
-  remove(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
 }
