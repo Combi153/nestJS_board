@@ -9,6 +9,12 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  //
+  // const dataSource = app.get(DataSource);
+  //
+  // await dataSource.initialize();
+  // await dataSource.runMigrations({ transaction: 'all' });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 
