@@ -9,9 +9,14 @@ export class Post extends CommonEntity {
   @Column()
   content: string;
 
-  constructor(writer: string, content: string) {
-    super();
-    this.writer = writer;
-    this.content = content;
+  static create(writer: string, content: string): Post {
+    if (writer === 'admin') {
+      throw new Error('작성자는 admin 일 수 없습니다.');
+    }
+
+    const post = new Post();
+    post.writer = writer;
+    post.content = content;
+    return post;
   }
 }
