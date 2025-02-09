@@ -34,9 +34,17 @@ export class CommentsController {
     return this.commentsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(+id, updateCommentDto);
+  @Patch('posts/:postId/comments/:commentId')
+  async update(
+    @Param('postId') postId: string,
+    @Param('commentId') commentId: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ): Promise<Comment> {
+    return await this.commentsService.update(
+      commentId,
+      postId,
+      updateCommentDto,
+    );
   }
 
   @Delete(':id')

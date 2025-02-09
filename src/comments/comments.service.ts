@@ -25,7 +25,7 @@ export class CommentsService {
     }
 
     return await this.commentRepository.save(
-      Comment.create(createCommentDto.writer, createCommentDto.content, post),
+      Comment.create({ ...createCommentDto, post: post }),
     );
   }
 
@@ -37,8 +37,27 @@ export class CommentsService {
     return `This action returns a #${id} comment`;
   }
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
+  async update(
+    commentId: string,
+    postId: string,
+    updateCommentDto: UpdateCommentDto,
+  ): Promise<Comment> {
+    const comment = await this.commentRepository.findOneBy({ id: commentId });
+    if (!comment) {
+      throw new Error(`Comment 가 존재하지 않습니다 commentId : ${commentId}`);
+    }
+    if (comment.post.id !== postId) {
+      throw new Error(
+        `입력한 Post 의 Comment 가 아닙니다. postId: ${postId}, commentId: ${commentId}`,
+      );
+    }
+
+    await this.commentRepository.update(
+      commentId,
+      Comment.create({ ...comment, ...updateCommentDto }),
+    );
+
+    return await this.commentRepository.findOneBy({ id: commentId });
   }
 
   remove(id: number) {
