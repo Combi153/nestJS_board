@@ -10,6 +10,6 @@ export class CreatePostDto {
   }
 
   toPost(): Post {
-    return new Post(this.writer, this.content);
+    return Post.create(this.writer, this.content);
   }
 }
