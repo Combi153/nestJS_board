@@ -1,4 +1,4 @@
-import './common/logs/instrument';
+import './common/loggers/instrument';
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
