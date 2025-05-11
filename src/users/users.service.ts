@@ -8,8 +8,10 @@ import { UserRepository } from './repositories/user-repository';
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    return await this.userRepository.create(createUserDto);
+  async create(dto: CreateUserDto): Promise<User> {
+    const user = await User.of(dto.name, dto.email, dto.password);
+
+    return await this.userRepository.create(user);
   }
 
   findAll() {

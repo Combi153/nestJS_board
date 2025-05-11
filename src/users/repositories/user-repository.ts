@@ -6,7 +6,6 @@ import {
   CommonRepository,
   Query,
 } from '../../common/repositories/common-repository';
-import { CreateUserDto } from '../dto/create-user.dto';
 
 @Injectable()
 export class UserRepository implements CommonRepository<User> {
@@ -15,8 +14,8 @@ export class UserRepository implements CommonRepository<User> {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(dto: CreateUserDto): Promise<User> {
-    return await this.userRepository.save(User.of(dto.name, dto.email));
+  async create(user: User): Promise<User> {
+    return await this.userRepository.save(user);
   }
 
   async findById(id: string): Promise<User> {

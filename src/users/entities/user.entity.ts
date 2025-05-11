@@ -1,5 +1,6 @@
 import { Column, Entity } from 'typeorm';
 import { CommonEntity } from '../../common/entities/common-entity';
+import { hash } from '../utils/hashing';
 
 @Entity()
 export class User extends CommonEntity {
@@ -9,13 +10,18 @@ export class User extends CommonEntity {
   @Column()
   email: string;
 
-  constructor(name: string, email: string) {
-    super();
-    this.name = name;
-    this.email = email;
-  }
+  @Column()
+  password: string;
 
-  static of(name: string, email: string): User {
-    return new User(name, email);
+  static async of(
+    name: string,
+    email: string,
+    password: string,
+  ): Promise<User> {
+    const user = new User();
+    user.name = name;
+    user.email = email;
+    user.password = await hash(password);
+    return user;
   }
 }
