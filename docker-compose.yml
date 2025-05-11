@@ -1,18 +1,16 @@
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: ${CONTAINER_NAME:-my_mysql}
-    environment:
-      MYSQL_DATABASE: ${DATABASE_SCHEMA:-mydb}
-      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD:-rootpassword}
-      MYSQL_USER: ${DATABASE_USERNAME:-user}
-      MYSQL_PASSWORD: ${DATABASE_PASSWORD:-userpassword}
-    ports:
-      - "${DATABASE_PORT:-3306}:3306"
+
+  db:
+    env_file:
+      - ".env.db"
+    image: postgres
+    restart: always
+    container_name: nestjs_board
     volumes:
-      - mysql_data:/var/lib/mysql
-    restart: on-failure
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
 volumes:
-  mysql_data:
-    name: ${VOLUME_NAME:-mysql_data}
+  postgres_data:
+    driver: local

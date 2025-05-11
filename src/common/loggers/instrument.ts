@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/nestjs';
 import { config } from 'dotenv';
 
-config({ path: './.env' });
+config({ path: './.prod.env' });
 
 console.log(process.env.SENTRY_DSN);
 Sentry.init({
