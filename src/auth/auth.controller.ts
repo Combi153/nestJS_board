@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { TokenResponse } from './dto/token-response.dto';
-import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
+import { SignInDto } from './dto/sign-in.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -11,10 +11,8 @@ export class AuthController {
     private readonly userService: UsersService,
   ) {}
 
-  @Post('sign-in')
-  async signIn(@Body() dto: CreateUserDto): Promise<TokenResponse> {
-    const user = await this.userService.create(dto);
-
-    return { accessToken: user.id };
+  @Post('login')
+  async signIn(@Body() dto: SignInDto): Promise<TokenResponse> {
+    return await this.authService.signIn(dto.email, dto.password);
   }
 }

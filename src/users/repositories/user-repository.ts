@@ -37,4 +37,8 @@ export class UserRepository implements CommonRepository<User> {
   async remove(id: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
+
+  async findByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOneBy({ email });
+  }
 }

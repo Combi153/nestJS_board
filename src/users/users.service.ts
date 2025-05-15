@@ -18,6 +18,10 @@ export class UsersService {
     return `This action returns all users`;
   }
 
+  async findOneByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findByEmail(email);
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} user`;
   }

@@ -24,4 +24,9 @@ export class User extends CommonEntity {
     user.password = await hash(password);
     return user;
   }
+
+  async isPasswordValid(password: string): Promise<boolean> {
+    const hashedPassword = await hash(password);
+    return this.password === hashedPassword;
+  }
 }
