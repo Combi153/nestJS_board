@@ -12,7 +12,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(user: any): Promise<TokenResponse> {
+  async signIn(user: UserResponse): Promise<TokenResponse> {
     const payload = { sub: user.id, email: user.email };
 
     return { accessToken: await this.jwtService.signAsync(payload) };
