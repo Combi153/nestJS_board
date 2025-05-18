@@ -19,6 +19,7 @@ async function bootstrap(): Promise<void> {
   const config = new DocumentBuilder()
     .setTitle('Nest Board')
     .setDescription('The board API description')
+    .addBearerAuth()
     .build();
 
   const documentFactory = (): OpenAPIObject =>
