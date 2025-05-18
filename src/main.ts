@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { GlobalExceptionFilter } from './common/exception-filters/global-exception-filter';
 import { DataSource } from 'typeorm';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -21,7 +21,8 @@ async function bootstrap(): Promise<void> {
     .setDescription('The board API description')
     .build();
 
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  const documentFactory = (): OpenAPIObject =>
+    SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
   // use exception filters

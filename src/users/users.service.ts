@@ -3,15 +3,21 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UserRepository } from './repositories/user-repository';
+import { UserResponse } from './dto/user-response.dto';
+import { hash } from './utils/hashing';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async create(dto: CreateUserDto): Promise<User> {
-    const user = await User.of(dto.name, dto.email, dto.password);
+  async create(dto: CreateUserDto): Promise<UserResponse> {
+    const hashedPassword = await hash(dto.password);
+    const user = await User.of(dto.name, dto.email, hashedPassword);
 
-    return await this.userRepository.create(user);
+    const result = await this.userRepository.create(user);
+    const { password, ...userResponse } = result;
+
+    return userResponse;
   }
 
   findAll() {

@@ -10,8 +10,8 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
 import { ApiTags } from '@nestjs/swagger';
+import { UserResponse } from './dto/user-response.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -19,7 +19,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  async create(@Body() createUserDto: CreateUserDto): Promise<UserResponse> {
     return await this.usersService.create(createUserDto);
   }
 

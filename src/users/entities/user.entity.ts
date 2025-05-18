@@ -1,6 +1,10 @@
 import { Column, Entity } from 'typeorm';
 import { CommonEntity } from '../../common/entities/common-entity';
-import { hash } from '../utils/hashing';
+import { isMatch } from '../utils/hashing';
+import { MaxLength, MinLength } from 'class-validator';
+
+export const PASSWORD_MAX_LENGTH = 30;
+export const PASSWORD_MIN_LENGTH = 4;
 
 @Entity()
 export class User extends CommonEntity {
@@ -11,22 +15,19 @@ export class User extends CommonEntity {
   email: string;
 
   @Column()
+  @MaxLength(PASSWORD_MAX_LENGTH)
+  @MinLength(PASSWORD_MIN_LENGTH)
   password: string;
 
-  static async of(
-    name: string,
-    email: string,
-    password: string,
-  ): Promise<User> {
+  static of(name: string, email: string, password: string): User {
     const user = new User();
     user.name = name;
     user.email = email;
-    user.password = await hash(password);
+    user.password = password;
     return user;
   }
 
   async isPasswordValid(password: string): Promise<boolean> {
-    const hashedPassword = await hash(password);
-    return this.password === hashedPassword;
+    return await isMatch(password, this.password);
   }
 }

@@ -1,20 +1,7 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { PickType } from '@nestjs/swagger';
+import { CreateUserDto } from '../../users/dto/create-user.dto';
 
-export class SignInDto {
-  @ApiProperty({
-    example: 'email@email.com',
-  })
-  @IsString()
-  @IsNotEmpty()
-  email: string;
-
-  @ApiProperty({
-    example: 'password',
-  })
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(30)
-  @MinLength(4)
-  password: string;
-}
+export class SignInDto extends PickType(CreateUserDto, [
+  'email',
+  'password',
+] as const) {}
