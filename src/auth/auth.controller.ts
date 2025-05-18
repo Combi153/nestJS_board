@@ -1,7 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { TokenResponse } from './dto/token-response.dto';
-import { SignInDto } from './dto/sign-in.dto';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
@@ -10,6 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UserResponse } from '../users/dto/user-response.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -20,9 +20,10 @@ export class AuthController {
     summary: '로그인 요청',
   })
   @Post('login')
+  @UseGuards(LocalAuthGuard)
   @ApiOkResponse({ type: TokenResponse })
-  async signIn(@Body() dto: SignInDto): Promise<TokenResponse> {
-    return await this.authService.signIn(dto.email, dto.password);
+  async signIn(@Request() req): Promise<TokenResponse> {
+    return this.authService.signIn(req.user);
   }
 
   @ApiOperation({

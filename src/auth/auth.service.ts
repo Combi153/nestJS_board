@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { TokenResponse } from './dto/token-response.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -16,16 +12,23 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(email: string, password: string): Promise<TokenResponse> {
-    const user = await this.usersService.findOneByEmail(email);
-
-    if (!user || !(await user.isPasswordValid(password))) {
-      throw new UnauthorizedException();
-    }
-
+  async signIn(user: any): Promise<TokenResponse> {
     const payload = { sub: user.id, email: user.email };
 
     return { accessToken: await this.jwtService.signAsync(payload) };
+  }
+
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<UserResponse | null> {
+    const user = await this.usersService.findOneByEmail(email);
+
+    if (user && (await user.isPasswordValid(password))) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
   }
 
   async signUp(dto: CreateUserDto): Promise<UserResponse> {
