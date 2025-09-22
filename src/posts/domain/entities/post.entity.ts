@@ -7,16 +7,37 @@ export class Post extends CommonEntity {
   writer: string;
 
   @Column()
+  title: string;
+
+  @Column()
   content: string;
 
-  static create(writer: string, content: string): Post {
-    if (writer === 'admin') {
-      throw new Error('작성자는 admin 일 수 없습니다.');
-    }
+  static create(writer: string, title: string, content: string): Post {
+    Post.validateWriter(writer);
 
     const post = new Post();
     post.writer = writer;
+    post.title = title;
     post.content = content;
     return post;
+  }
+
+  private static validateWriter(writer: string): void {
+    if (writer === 'admin') {
+      throw new Error('작성자는 admin 일 수 없습니다.');
+    }
+  }
+
+  updateWriter(writer: string): void {
+    Post.validateWriter(writer);
+    this.writer = writer;
+  }
+
+  updateTitle(title: string): void {
+    this.title = title;
+  }
+
+  updateContent(content: string): void {
+    this.content = content;
   }
 }
