@@ -1,15 +1,25 @@
-import { Post } from '../domain/entities/post.entity';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreatePostDto {
+  @ApiProperty({
+    example: 'writer',
+  })
+  @IsString()
+  @IsNotEmpty()
   writer: string;
+
+  @ApiProperty({
+    example: 'title',
+  })
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @ApiProperty({
+    example: 'content',
+  })
+  @IsString()
+  @IsNotEmpty()
   content: string;
-
-  constructor(writer: string, content: string) {
-    this.writer = writer;
-    this.content = content;
-  }
-
-  toPost(): Post {
-    return Post.create(this.writer, this.content);
-  }
 }
